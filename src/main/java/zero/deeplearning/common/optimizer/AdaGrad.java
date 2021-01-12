@@ -13,7 +13,7 @@ public class AdaGrad implements Optimizer {
     private Map<String, RealMatrix> h;
 
     public AdaGrad() {
-        lr = 0.01;
+        this(0.01);
     }
 
     public AdaGrad(double lr) {

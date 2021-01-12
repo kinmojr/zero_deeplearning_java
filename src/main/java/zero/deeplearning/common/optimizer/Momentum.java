@@ -14,13 +14,11 @@ public class Momentum implements Optimizer {
     private Map<String, RealMatrix> v;
 
     public Momentum() {
-        lr = 0.01;
-        momentum = 0.9;
+        this(0.01);
     }
 
     public Momentum(double lr) {
-        this.lr = lr;
-        this.momentum = 0.9;
+        this(lr, 0.9);
     }
 
     public Momentum(double lr, double momentum) {

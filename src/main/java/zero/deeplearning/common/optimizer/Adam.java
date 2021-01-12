@@ -17,15 +17,11 @@ public class Adam implements Optimizer {
     private Map<String, RealMatrix> v;
 
     public Adam() {
-        lr = 0.001;
-        beta1 = 0.9;
-        beta2 = 0.999;
+        this(0.01);
     }
 
     public Adam(double lr) {
-        this.lr = lr;
-        beta1 = 0.9;
-        beta2 = 0.999;
+        this(lr, 0.9, 0.999);
     }
 
     public Adam(double lr, double beta1, double beta2) {
