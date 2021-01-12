@@ -1,6 +1,5 @@
 package zero.deeplearning.ch04;
 
-import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
 import java.util.HashMap;
@@ -67,7 +66,7 @@ public class TwoLayerNet {
                 w.setEntry(i, j, tmp);
             }
         }
-        return MatrixUtils.createRealMatrix(grads);
+        return createMatrix(grads);
     }
 
     public HashMap<String, RealMatrix> gradient(RealMatrix x, RealMatrix t) {

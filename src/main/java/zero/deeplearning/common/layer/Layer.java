@@ -23,7 +23,15 @@ public class Layer {
         throw new RuntimeException("This method should not be called.");
     }
 
-    public void update(RealMatrix w, RealMatrix b){
+    public RealMatrix w() {
+        throw new RuntimeException("This method should not be called.");
+    }
+
+    public RealMatrix b() {
+        throw new RuntimeException("This method should not be called.");
+    }
+
+    public void update(RealMatrix w, RealMatrix b) {
         throw new RuntimeException("This method should not be called.");
     }
 }

@@ -2,7 +2,6 @@ package zero.deeplearning.common;
 
 import static zero.deeplearning.common.Utils.*;
 
-import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 
@@ -17,7 +16,7 @@ public class Functions {
         for (int i = 0; i < aM.getRowDimension(); i++) {
             b[i] = row;
         }
-        return add(aM, MatrixUtils.createRealMatrix(b));
+        return add(aM, createMatrix(b));
     }
 
     public static RealMatrix add(RealMatrix aM, double b) {
@@ -49,7 +48,7 @@ public class Functions {
                 retA2[i][j] = aA2[i][j] * bA2[i][j];
             }
         }
-        return MatrixUtils.createRealMatrix(retA2);
+        return createMatrix(retA2);
     }
 
     public static RealVector mult(RealVector aV, double b) {
@@ -60,8 +59,16 @@ public class Functions {
         return aM.scalarMultiply(1 / b);
     }
 
-    public static RealVector div(RealVector aV, double b) {
-        return aV.mapMultiply(1 / b);
+    public static RealMatrix div(RealMatrix aM, RealMatrix bM) {
+        double[][] aA2 = aM.getData();
+        double[][] bA2 = bM.getData();
+        double[][] retA2 = new double[aA2.length][aA2[0].length];
+        for (int i = 0; i < aA2.length; i++) {
+            for (int j = 0; j < aA2[i].length; j++) {
+                retA2[i][j] = aA2[i][j] / bA2[i][j];
+            }
+        }
+        return createMatrix(retA2);
     }
 
     public static RealMatrix dot(RealMatrix aM, RealMatrix bM) {
@@ -82,7 +89,7 @@ public class Functions {
             }
             ret[0][j] = sum;
         }
-        return MatrixUtils.createRealMatrix(ret);
+        return createMatrix(ret);
     }
 
     public static RealMatrix pow(RealMatrix aM, double b) {
@@ -92,15 +99,17 @@ public class Functions {
                 pA2[i][j] = Math.pow(pA2[i][j], b);
             }
         }
-        return MatrixUtils.createRealMatrix(pA2);
+        return createMatrix(pA2);
     }
 
-    public static RealVector pow(RealVector aV, double b) {
-        double[] pA = aV.toArray();
-        for (int i = 0; i < pA.length; i++) {
-            pA[i] = Math.pow(pA[i], b);
+    public static RealMatrix sqrt(RealMatrix aM) {
+        double[][] pA2 = aM.getData();
+        for (int i = 0; i < pA2.length; i++) {
+            for (int j = 0; j < pA2[i].length; j++) {
+                pA2[i][j] = Math.sqrt(pA2[i][j]);
+            }
         }
-        return MatrixUtils.createRealVector(pA);
+        return createMatrix(pA2);
     }
 
     public static RealMatrix t(RealMatrix aM) {
@@ -161,7 +170,7 @@ public class Functions {
     }
 
     public static RealMatrix softmax(RealMatrix matrix) {
-        return MatrixUtils.createRealMatrix(softmax(matrix.getData()));
+        return createMatrix(softmax(matrix.getData()));
     }
 
     public static double sigmoid(double value) {
@@ -185,7 +194,7 @@ public class Functions {
     }
 
     public static RealMatrix sigmoid(RealMatrix matrix) {
-        return MatrixUtils.createRealMatrix(sigmoid(matrix.getData()));
+        return createMatrix(sigmoid(matrix.getData()));
     }
 
     public static RealMatrix sigmoidGrad(RealMatrix matrix) {
@@ -193,13 +202,14 @@ public class Functions {
         return mult(sub(ones, sigmoid(matrix)), sigmoid(matrix));
     }
 
-    public static RealMatrix createMatrix(int row, int col, double val) {
-        double[][] matrix = new double[row][col];
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                matrix[i][j] = val;
+    public static double l2norm(RealMatrix x) {
+        double ret = 0.0;
+        for (int i = 0; i < x.getRowDimension(); i++) {
+            for (int j = 0; j < x.getColumnDimension(); j++) {
+                ret += Math.pow(x.getEntry(i, j), 2);
             }
         }
-        return MatrixUtils.createRealMatrix(matrix);
+        return ret;
     }
+
 }

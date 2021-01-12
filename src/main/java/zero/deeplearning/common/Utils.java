@@ -63,7 +63,7 @@ public class Utils {
             }
         }
 
-        return MatrixUtils.createRealMatrix(matrix);
+        return createMatrix(matrix);
     }
 
     public static RealMatrix initWeight(int rowSize, int colSize, double weightInitStd) {
@@ -74,11 +74,11 @@ public class Utils {
                 vals[i][j] = weightInitStd * rand.nextGaussian();
             }
         }
-        return MatrixUtils.createRealMatrix(vals);
+        return createMatrix(vals);
     }
 
     public static RealMatrix initBias(int size) {
-        return MatrixUtils.createRealMatrix(new double[1][size]);
+        return createMatrix(new double[1][size]);
     }
 
     public static RealMatrix extractRowCol(RealMatrix aM, int startRow, int endRow, int startCol, int endCol) {
@@ -126,6 +126,34 @@ public class Utils {
         return indexes;
     }
 
+    public static RealMatrix createMatrix(int row, int col, double val) {
+        double[][] matrix = new double[row][col];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                matrix[i][j] = val;
+            }
+        }
+        return createMatrix(matrix);
+    }
+
+    public static RealMatrix createMatrix(int row, int col) {
+        return MatrixUtils.createRealMatrix(row, col);
+    }
+
+    public static RealMatrix createMatrix(double[][] vals) {
+        return MatrixUtils.createRealMatrix(vals);
+    }
+
+    public static RealMatrix randomMatrix(int rowNum, int colNum) {
+        RealMatrix ret = createMatrix(rowNum, colNum);
+        Random rand = new Random();
+        for (int i = 0; i < rowNum; i++) {
+            for (int j = 0; j < colNum; j++) {
+                ret.setEntry(i, j, rand.nextGaussian());
+            }
+        }
+        return ret;
+    }
 
     public static void download(String baseUrl, String baseDir, String fileName) throws IOException {
         String filePath = baseDir + fileName;
@@ -147,5 +175,17 @@ public class Utils {
                 out.write(data, 0, ret);
             }
         }
+    }
+
+    public static void debugMatrix(String key, RealMatrix m) {
+        System.out.print(key + " " + m.getRowDimension() + " * " + m.getColumnDimension() + " ");
+        double total = 0.0;
+        for (int i = 0; i < m.getRowDimension(); i++) {
+            for (int j = 0; j < m.getColumnDimension(); j++) {
+                total += Math.abs(m.getEntry(i, j));
+            }
+        }
+        total = total / ((m.getRowDimension() + 1) * (m.getColumnDimension() + 1));
+        System.out.println(total);
     }
 }

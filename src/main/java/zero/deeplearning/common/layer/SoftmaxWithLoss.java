@@ -1,9 +1,9 @@
 package zero.deeplearning.common.layer;
 
-import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
 import static zero.deeplearning.common.Functions.*;
+import static zero.deeplearning.common.Utils.*;
 
 public class SoftmaxWithLoss extends Layer {
     private RealMatrix y;
@@ -12,7 +12,7 @@ public class SoftmaxWithLoss extends Layer {
     @Override
     public double forward(RealMatrix x, RealMatrix t) {
         this.t = t;
-        y = MatrixUtils.createRealMatrix(softmax(x.getData()));
+        y = createMatrix(softmax(x.getData()));
         return crossEntropyError(y, t);
     }
 

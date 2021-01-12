@@ -36,12 +36,22 @@ public class Affine extends Layer {
     }
 
     @Override
+    public RealMatrix w() {
+        return w;
+    }
+
+    @Override
     public RealMatrix db() {
         return dB;
     }
 
     @Override
-    public void update(RealMatrix w, RealMatrix b){
+    public RealMatrix b() {
+        return b;
+    }
+
+    @Override
+    public void update(RealMatrix w, RealMatrix b) {
         this.w = w;
         this.b = b;
     }

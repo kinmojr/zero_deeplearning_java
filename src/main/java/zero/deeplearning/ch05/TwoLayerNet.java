@@ -8,7 +8,6 @@ import zero.deeplearning.common.layer.SoftmaxWithLoss;
 
 import java.util.*;
 
-import static zero.deeplearning.common.Functions.*;
 import static zero.deeplearning.common.Utils.*;
 
 public class TwoLayerNet {
@@ -32,8 +31,8 @@ public class TwoLayerNet {
     }
 
     private RealMatrix predict(RealMatrix x) {
-        for (String key : layers.keySet())
-            x = layers.get(key).forward(x);
+        for (Layer layer : layers.values())
+            x = layer.forward(x);
 
         return x;
     }

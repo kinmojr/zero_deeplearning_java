@@ -1,6 +1,5 @@
 package zero.deeplearning.common;
 
-import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
 import java.io.DataInputStream;
@@ -70,7 +69,7 @@ public class MNIST {
                 data[i][0] = is.readUnsignedByte();
             }
         }
-        return MatrixUtils.createRealMatrix(data);
+        return createMatrix(data);
     }
 
     private static RealMatrix loadImg(String fileName) throws IOException {
@@ -87,7 +86,7 @@ public class MNIST {
                 }
             }
         }
-        return MatrixUtils.createRealMatrix(data);
+        return createMatrix(data);
     }
 
     private static void normalize(RealMatrix x) {
@@ -103,6 +102,6 @@ public class MNIST {
         for (int i = 0; i < x.getRowDimension(); i++) {
             ret[i][(int) x.getEntry(i, 0)] = 1.0;
         }
-        return MatrixUtils.createRealMatrix(ret);
+        return createMatrix(ret);
     }
 }
