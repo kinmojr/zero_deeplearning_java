@@ -4,7 +4,9 @@ package zero.deeplearning.network;
 import org.apache.commons.math3.linear.RealMatrix;
 import zero.deeplearning.optimizer.Optimizer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static zero.deeplearning.common.Utils.*;
@@ -26,6 +28,8 @@ public class Trainer {
     private int maxIter;
     private int currentIter;
     private int currentEpoch;
+    private List<Double> trainAccList = new ArrayList<>();
+    private List<Double> testAccList = new ArrayList<>();
 
     public Trainer(Network network, RealMatrix xTrain, RealMatrix tTrain, RealMatrix xTest, RealMatrix tTest, int epochs, int miniBatchSize, String optimizerName, Map<String, Double> optimizerParam, int evaluateSampleNumPerEpoch, boolean verbose) {
         this.network = network;
@@ -77,6 +81,8 @@ public class Trainer {
 
             double trainAcc = network.accuracy(xTrainSample, tTrainSample);
             double testAcc = network.accuracy(xTestSample, tTestSample);
+            trainAccList.add(trainAcc);
+            testAccList.add(testAcc);
             if (verbose) {
                 System.out.println("=== epoch:" + currentEpoch + ", train acc:" + trainAcc + ", test acc:" + testAcc + " ===");
             }
@@ -95,5 +101,9 @@ public class Trainer {
             System.out.println("=============== Final Test Accuracy ===============");
             System.out.println("test acc:" + testAcc);
         }
+    }
+
+    public List<Double> getTrainAccList() {
+        return trainAccList;
     }
 }

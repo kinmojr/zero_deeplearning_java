@@ -7,10 +7,7 @@ import zero.deeplearning.optimizer.*;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class Utils {
     public static int argmax(double[] values) {
@@ -196,5 +193,26 @@ public class Utils {
             throw new RuntimeException("Unsupported optimizer");
         }
         return optimizer;
+    }
+
+    public static List<Integer> shuffleIndex(int size) {
+        Integer[] indexes = new Integer[size];
+        for (int i = 0; i < size; i++) {
+            indexes[i] = i;
+        }
+        List<Integer> list = Arrays.asList(indexes);
+        Collections.shuffle(list);
+        return list;
+    }
+
+    public static RealMatrix shuffleDataset(RealMatrix aM, List<Integer> index) {
+        double[][] ret = aM.getData();
+        double[] tmp;
+        for (int i = 0; i < index.size(); i++) {
+            tmp = ret[i];
+            ret[i] = ret[index.get(i)];
+            ret[index.get(i)] = tmp;
+        }
+        return createMatrix(ret);
     }
 }

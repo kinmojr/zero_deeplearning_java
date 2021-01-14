@@ -73,6 +73,11 @@ public class MultiLayerNet extends Network {
     }
 
     @Override
+    public double loss(RealMatrix x, RealMatrix t, boolean trainFlag) {
+        return loss(x, t);
+    }
+
+    @Override
     public double loss(RealMatrix x, RealMatrix t) {
         RealMatrix y = predict(x);
 
