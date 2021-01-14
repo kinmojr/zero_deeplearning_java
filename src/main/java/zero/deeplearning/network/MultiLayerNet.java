@@ -1,19 +1,14 @@
-package zero.deeplearning.ch06;
+package zero.deeplearning.network;
 
 import org.apache.commons.math3.linear.RealMatrix;
+import zero.deeplearning.layer.*;
+
+import java.util.*;
 
 import static zero.deeplearning.common.Functions.*;
 import static zero.deeplearning.common.Utils.*;
 
-import zero.deeplearning.common.layer.Layer;
-import zero.deeplearning.common.layer.Affine;
-import zero.deeplearning.common.layer.Relu;
-import zero.deeplearning.common.layer.Sigmoid;
-import zero.deeplearning.common.layer.SoftmaxWithLoss;
-
-import java.util.*;
-
-public class MultiLayerNet {
+public class MultiLayerNet extends Network {
     private int inputSize;
     private int[] hiddenSizeList;
     private int outputSize;
@@ -69,6 +64,7 @@ public class MultiLayerNet {
         }
     }
 
+    @Override
     public RealMatrix predict(RealMatrix x) {
         for (Layer layer : layers.values())
             x = layer.forward(x);
@@ -76,6 +72,7 @@ public class MultiLayerNet {
         return x;
     }
 
+    @Override
     public double loss(RealMatrix x, RealMatrix t) {
         RealMatrix y = predict(x);
 
@@ -88,6 +85,7 @@ public class MultiLayerNet {
         return lastLayer.forward(y, t) + weightDecay;
     }
 
+    @Override
     public double accuracy(RealMatrix x, RealMatrix t) {
         int accuracyCnt = 0;
         int[] y = argmax(predict(x).getData());
@@ -99,6 +97,7 @@ public class MultiLayerNet {
         return (float) accuracyCnt / (float) x.getRowDimension();
     }
 
+    @Override
     public LinkedHashMap<String, RealMatrix> gradient(RealMatrix x, RealMatrix t) {
         loss(x, t);
 
@@ -119,6 +118,7 @@ public class MultiLayerNet {
         return grads;
     }
 
+    @Override
     public void update() {
         for (String key : layers.keySet()) {
             if (key.length() > 6 && "Affine".equals(key.substring(0, 6))) {
@@ -126,5 +126,10 @@ public class MultiLayerNet {
                 layers.get(key).update(params.get("W" + index), params.get("b" + index));
             }
         }
+    }
+
+    @Override
+    public Map<String, RealMatrix> getParams() {
+        return params;
     }
 }

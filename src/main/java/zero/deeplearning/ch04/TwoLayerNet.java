@@ -14,15 +14,15 @@ public class TwoLayerNet {
     public TwoLayerNet(int inputSize, int hiddenSize, int outputSize, double weightInitStd) {
         params = new HashMap<>();
         params.put("w1", initWeight(inputSize, hiddenSize, weightInitStd));
-        params.put("b1", initBias(hiddenSize));
+        params.put("b1", createMatrix(new double[1][hiddenSize]));
         params.put("w2", initWeight(hiddenSize, outputSize, weightInitStd));
-        params.put("b2", initBias(outputSize));
+        params.put("b2", createMatrix(new double[1][outputSize]));
     }
 
     private RealMatrix predict(RealMatrix x) {
-        RealMatrix a1 = addBias(dot(x, params.get("w1")), params.get("b1"));
+        RealMatrix a1 = add(dot(x, params.get("w1")), params.get("b1"));
         RealMatrix z1 = sigmoid(a1);
-        RealMatrix a2 = addBias(dot(z1, params.get("w2")), params.get("b2"));
+        RealMatrix a2 = add(dot(z1, params.get("w2")), params.get("b2"));
         return softmax(a2);
     }
 
@@ -74,9 +74,9 @@ public class TwoLayerNet {
 
         int batchNum = x.getRowDimension();
 
-        RealMatrix a1 = addBias(dot(x, params.get("w1")), params.get("b1"));
+        RealMatrix a1 = add(dot(x, params.get("w1")), params.get("b1"));
         RealMatrix z1 = sigmoid(a1);
-        RealMatrix a2 = addBias(dot(z1, params.get("w2")), params.get("b2"));
+        RealMatrix a2 = add(dot(z1, params.get("w2")), params.get("b2"));
         RealMatrix y = softmax(a2);
 
         RealMatrix dy = div(sub(y, t), batchNum);

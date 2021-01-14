@@ -1,14 +1,14 @@
 package zero.deeplearning.ch03;
 
-import zero.deeplearning.common.MNIST;
-
-import static zero.deeplearning.common.Utils.*;
-import static zero.deeplearning.common.Functions.*;
-
 import org.apache.commons.math3.linear.RealMatrix;
+import zero.deeplearning.common.MnistDataset;
 
 import java.io.IOException;
 import java.util.HashMap;
+
+import static zero.deeplearning.common.Functions.*;
+import static zero.deeplearning.common.Utils.argmax;
+import static zero.deeplearning.common.Utils.readWeights;
 
 public class NeuralnetMnist {
     private RealMatrix w1, w2, w3, b1, b2, b3;
@@ -32,7 +32,7 @@ public class NeuralnetMnist {
     }
 
     public static void main(String... args) throws IOException {
-        HashMap<String, RealMatrix> dataset = MNIST.loadMinist(true, false);
+        HashMap<String, RealMatrix> dataset = MnistDataset.loadMinist(true, false);
         RealMatrix x = dataset.get("test_img");
         RealMatrix t = dataset.get("test_label");
 

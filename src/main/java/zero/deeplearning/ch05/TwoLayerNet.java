@@ -1,10 +1,10 @@
 package zero.deeplearning.ch05;
 
 import org.apache.commons.math3.linear.RealMatrix;
-import zero.deeplearning.common.layer.Affine;
-import zero.deeplearning.common.layer.Layer;
-import zero.deeplearning.common.layer.Relu;
-import zero.deeplearning.common.layer.SoftmaxWithLoss;
+import zero.deeplearning.layer.Affine;
+import zero.deeplearning.layer.Layer;
+import zero.deeplearning.layer.Relu;
+import zero.deeplearning.layer.SoftmaxWithLoss;
 
 import java.util.*;
 
@@ -18,9 +18,9 @@ public class TwoLayerNet {
     public TwoLayerNet(int inputSize, int hiddenSize, int outputSize, double weightInitStd) {
         params = new HashMap<>();
         params.put("w1", initWeight(inputSize, hiddenSize, weightInitStd));
-        params.put("b1", initBias(hiddenSize));
+        params.put("b1", createMatrix(new double[1][hiddenSize]));
         params.put("w2", initWeight(hiddenSize, outputSize, weightInitStd));
-        params.put("b2", initBias(outputSize));
+        params.put("b2", createMatrix(new double[1][outputSize]));
 
         layers = new LinkedHashMap<>();
         layers.put("Affine1", new Affine(params.get("w1"), params.get("b1")));
@@ -73,7 +73,7 @@ public class TwoLayerNet {
         return grads;
     }
 
-    public void update(){
+    public void update() {
         layers.get("Affine1").update(params.get("w1"), params.get("b1"));
         layers.get("Affine2").update(params.get("w2"), params.get("b2"));
     }

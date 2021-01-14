@@ -1,9 +1,9 @@
-package zero.deeplearning.common.layer;
+package zero.deeplearning.layer;
 
 import org.apache.commons.math3.linear.RealMatrix;
 
-import static zero.deeplearning.common.Utils.*;
-import static zero.deeplearning.common.Functions.*;
+import static zero.deeplearning.common.Functions.sigmoid;
+import static zero.deeplearning.common.Utils.createMatrix;
 
 public class Sigmoid extends Layer {
     RealMatrix out;

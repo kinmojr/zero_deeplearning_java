@@ -1,9 +1,13 @@
-package zero.deeplearning.common.layer;
+package zero.deeplearning.layer;
 
 import org.apache.commons.math3.linear.RealMatrix;
 
-public class Layer {
+public abstract class Layer {
     public RealMatrix forward(RealMatrix x) {
+        throw new RuntimeException("This method should not be called.");
+    }
+
+    public RealMatrix forward(RealMatrix x, boolean trainFlag) {
         throw new RuntimeException("This method should not be called.");
     }
 
@@ -31,7 +35,19 @@ public class Layer {
         throw new RuntimeException("This method should not be called.");
     }
 
+    public RealMatrix dgamma() {
+        throw new RuntimeException("This method should not be called.");
+    }
+
+    public RealMatrix dbeta() {
+        throw new RuntimeException("This method should not be called.");
+    }
+
     public void update(RealMatrix w, RealMatrix b) {
         throw new RuntimeException("This method should not be called.");
+    }
+
+    public boolean hasTrainFlag() {
+        return false;
     }
 }

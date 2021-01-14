@@ -1,19 +1,21 @@
 package zero.deeplearning.ch06;
 
 import org.apache.commons.math3.linear.RealMatrix;
-import zero.deeplearning.common.MNIST;
-import zero.deeplearning.common.optimizer.*;
+import zero.deeplearning.common.MnistDataset;
+import zero.deeplearning.network.MultiLayerNet;
+import zero.deeplearning.optimizer.*;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static zero.deeplearning.common.Utils.*;
+import static zero.deeplearning.common.Utils.extractRow;
+import static zero.deeplearning.common.Utils.randomChoice;
 
 public class OptimizerCompareMnist {
     public static void main(String... args) throws IOException {
-        HashMap<String, RealMatrix> dataset = MNIST.loadMinist(true, true);
+        HashMap<String, RealMatrix> dataset = MnistDataset.loadMinist(true, true);
         RealMatrix xTrain = dataset.get("train_img");
         RealMatrix tTrain = dataset.get("train_label");
 

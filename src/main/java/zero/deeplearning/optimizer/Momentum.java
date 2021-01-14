@@ -1,4 +1,4 @@
-package zero.deeplearning.common.optimizer;
+package zero.deeplearning.optimizer;
 
 import org.apache.commons.math3.linear.RealMatrix;
 
@@ -24,6 +24,16 @@ public class Momentum implements Optimizer {
     public Momentum(double lr, double momentum) {
         this.lr = lr;
         this.momentum = momentum;
+    }
+
+    public Momentum(Map<String, Double> param) {
+        this();
+        if (param.containsKey("lr")) {
+            lr = param.get("lr");
+        }
+        if (param.containsKey("momentum")) {
+            momentum = param.get("momentum");
+        }
     }
 
     @Override

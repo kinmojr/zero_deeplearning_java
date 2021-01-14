@@ -1,14 +1,13 @@
 package zero.deeplearning.ch03;
 
-import zero.deeplearning.common.MNIST;
-
-import static zero.deeplearning.common.Utils.*;
-import static zero.deeplearning.common.Functions.*;
-
 import org.apache.commons.math3.linear.RealMatrix;
+import zero.deeplearning.common.MnistDataset;
 
 import java.io.IOException;
 import java.util.HashMap;
+
+import static zero.deeplearning.common.Functions.*;
+import static zero.deeplearning.common.Utils.*;
 
 public class NeuralnetMnistBatch {
     private RealMatrix w1, w2, w3, b1, b2, b3;
@@ -23,16 +22,16 @@ public class NeuralnetMnistBatch {
     }
 
     private RealMatrix predict(RealMatrix x) {
-        RealMatrix a1 = addBias(dot(x, w1), b1);
+        RealMatrix a1 = add(dot(x, w1), b1);
         RealMatrix z1 = sigmoid(a1);
-        RealMatrix a2 = addBias(dot(z1, w2), b2);
+        RealMatrix a2 = add(dot(z1, w2), b2);
         RealMatrix z2 = sigmoid(a2);
-        RealMatrix a3 = addBias(dot(z2, w3), b3);
+        RealMatrix a3 = add(dot(z2, w3), b3);
         return softmax(a3);
     }
 
     public static void main(String... args) throws IOException {
-        HashMap<String, RealMatrix> dataset = MNIST.loadMinist(true, false);
+        HashMap<String, RealMatrix> dataset = MnistDataset.loadMinist(true, false);
         RealMatrix x = dataset.get("test_img");
         RealMatrix t = dataset.get("test_label");
         NeuralnetMnistBatch network = new NeuralnetMnistBatch();

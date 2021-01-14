@@ -1,38 +1,37 @@
 package zero.deeplearning.common;
 
-import static zero.deeplearning.common.Utils.*;
-
 import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.linear.RealVector;
+
+import static zero.deeplearning.common.Utils.createMatrix;
+import static zero.deeplearning.common.Utils.max;
 
 public class Functions {
     public static RealMatrix add(RealMatrix aM, RealMatrix bM) {
-        return aM.add(bM);
-    }
-
-    public static RealMatrix addBias(RealMatrix aM, RealMatrix bM) {
-        double[] row = bM.getRow(0);
-        double[][] b = new double[aM.getRowDimension()][row.length];
-        for (int i = 0; i < aM.getRowDimension(); i++) {
-            b[i] = row;
+        if (isSameSize(aM, bM)) {
+            return aM.add(bM);
+        } else if (canExpandFirst(aM, bM)) {
+            return add(copyRow(aM, bM.getRowDimension()), bM);
+        } else if (canExpandSecond(aM, bM)) {
+            return add(aM, copyRow(bM, aM.getRowDimension()));
+        } else {
+            throw new RuntimeException("Invalid matrix size");
         }
-        return add(aM, createMatrix(b));
     }
 
     public static RealMatrix add(RealMatrix aM, double b) {
         return aM.scalarAdd(b);
     }
 
-    public static RealVector add(RealVector aV, double b) {
-        return aV.mapAdd(b);
-    }
-
     public static RealMatrix sub(RealMatrix aM, RealMatrix bM) {
-        return aM.subtract(bM);
-    }
-
-    public static RealVector sub(RealVector aV, RealVector bV) {
-        return aV.subtract(bV);
+        if (isSameSize(aM, bM)) {
+            return aM.subtract(bM);
+        } else if (canExpandFirst(aM, bM)) {
+            return sub(copyRow(aM, bM.getRowDimension()), bM);
+        } else if (canExpandSecond(aM, bM)) {
+            return sub(aM, copyRow(bM, aM.getRowDimension()));
+        } else {
+            throw new RuntimeException("Invalid matrix size");
+        }
     }
 
     public static RealMatrix mult(RealMatrix aM, double b) {
@@ -40,19 +39,23 @@ public class Functions {
     }
 
     public static RealMatrix mult(RealMatrix aM, RealMatrix bM) {
-        double[][] aA2 = aM.getData();
-        double[][] bA2 = bM.getData();
-        double[][] retA2 = new double[aA2.length][aA2[0].length];
-        for (int i = 0; i < aA2.length; i++) {
-            for (int j = 0; j < aA2[i].length; j++) {
-                retA2[i][j] = aA2[i][j] * bA2[i][j];
+        if (isSameSize(aM, bM)) {
+            double[][] aA2 = aM.getData();
+            double[][] bA2 = bM.getData();
+            double[][] retA2 = new double[aA2.length][aA2[0].length];
+            for (int i = 0; i < aA2.length; i++) {
+                for (int j = 0; j < aA2[i].length; j++) {
+                    retA2[i][j] = aA2[i][j] * bA2[i][j];
+                }
             }
+            return createMatrix(retA2);
+        } else if (canExpandFirst(aM, bM)) {
+            return mult(copyRow(aM, bM.getRowDimension()), bM);
+        } else if (canExpandSecond(aM, bM)) {
+            return mult(aM, copyRow(bM, aM.getRowDimension()));
+        } else {
+            throw new RuntimeException("Invalid matrix size");
         }
-        return createMatrix(retA2);
-    }
-
-    public static RealVector mult(RealVector aV, double b) {
-        return aV.mapMultiply(b);
     }
 
     public static RealMatrix div(RealMatrix aM, double b) {
@@ -60,23 +63,27 @@ public class Functions {
     }
 
     public static RealMatrix div(RealMatrix aM, RealMatrix bM) {
-        double[][] aA2 = aM.getData();
-        double[][] bA2 = bM.getData();
-        double[][] retA2 = new double[aA2.length][aA2[0].length];
-        for (int i = 0; i < aA2.length; i++) {
-            for (int j = 0; j < aA2[i].length; j++) {
-                retA2[i][j] = aA2[i][j] / bA2[i][j];
+        if (isSameSize(aM, bM)) {
+            double[][] aA2 = aM.getData();
+            double[][] bA2 = bM.getData();
+            double[][] retA2 = new double[aA2.length][aA2[0].length];
+            for (int i = 0; i < aA2.length; i++) {
+                for (int j = 0; j < aA2[i].length; j++) {
+                    retA2[i][j] = aA2[i][j] / bA2[i][j];
+                }
             }
+            return createMatrix(retA2);
+        } else if (canExpandFirst(aM, bM)) {
+            return div(copyRow(aM, bM.getRowDimension()), bM);
+        } else if (canExpandSecond(aM, bM)) {
+            return div(aM, copyRow(bM, aM.getRowDimension()));
+        } else {
+            throw new RuntimeException("Invalid matrix size");
         }
-        return createMatrix(retA2);
     }
 
     public static RealMatrix dot(RealMatrix aM, RealMatrix bM) {
         return aM.multiply(bM);
-    }
-
-    public static RealVector dot(RealMatrix aM, RealVector bV) {
-        return aM.operate(bV);
     }
 
     public static RealMatrix sumCol(RealMatrix aM) {
@@ -115,16 +122,6 @@ public class Functions {
     public static RealMatrix t(RealMatrix aM) {
         return aM.transpose();
     }
-
-    public static double mean(RealVector aV) {
-        double[] aA = aV.toArray();
-        double sum = 0.0;
-        for (double val : aA) {
-            sum += val;
-        }
-        return sum / aA.length;
-    }
-
 
     public static double crossEntropyError(double[] y, double[] t) {
         double sum = 0.0;
@@ -212,4 +209,34 @@ public class Functions {
         return ret;
     }
 
+    private static boolean isSameSize(RealMatrix aM, RealMatrix bM) {
+        if (aM.getRowDimension() == bM.getRowDimension() && aM.getColumnDimension() == bM.getColumnDimension()) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean canExpandFirst(RealMatrix aM, RealMatrix bM) {
+        if (aM.getColumnDimension() == bM.getColumnDimension() && aM.getRowDimension() == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean canExpandSecond(RealMatrix aM, RealMatrix bM) {
+        if (aM.getColumnDimension() == bM.getColumnDimension() && bM.getRowDimension() == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    private static RealMatrix copyRow(RealMatrix aM, int num) {
+        double[][] ret = new double[num][aM.getColumnDimension()];
+        for (int i = 0; i < ret.length; i++) {
+            for (int j = 0; j < ret[i].length; j++) {
+                ret[i] = aM.getData()[0];
+            }
+        }
+        return createMatrix(ret);
+    }
 }

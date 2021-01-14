@@ -1,10 +1,11 @@
-package zero.deeplearning.common.optimizer;
+package zero.deeplearning.optimizer;
 
 import org.apache.commons.math3.linear.RealMatrix;
 
 import java.util.Map;
 
-import static zero.deeplearning.common.Functions.*;
+import static zero.deeplearning.common.Functions.mult;
+import static zero.deeplearning.common.Functions.sub;
 
 public class SGD implements Optimizer {
     private double lr;
@@ -15,6 +16,13 @@ public class SGD implements Optimizer {
 
     public SGD(double lr) {
         this.lr = lr;
+    }
+
+    public SGD(Map<String, Double> param) {
+        this();
+        if (param.containsKey("lr")) {
+            lr = param.get("lr");
+        }
     }
 
     @Override

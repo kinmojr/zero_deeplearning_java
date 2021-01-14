@@ -1,4 +1,4 @@
-package zero.deeplearning.common.optimizer;
+package zero.deeplearning.optimizer;
 
 import org.apache.commons.math3.linear.RealMatrix;
 
@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static zero.deeplearning.common.Functions.*;
-import static zero.deeplearning.common.Utils.*;
+import static zero.deeplearning.common.Utils.createMatrix;
 
 public class AdaGrad implements Optimizer {
     private double lr;
@@ -18,6 +18,13 @@ public class AdaGrad implements Optimizer {
 
     public AdaGrad(double lr) {
         this.lr = lr;
+    }
+
+    public AdaGrad(Map<String, Double> param) {
+        this();
+        if (param.containsKey("lr")) {
+            lr = param.get("lr");
+        }
     }
 
     @Override

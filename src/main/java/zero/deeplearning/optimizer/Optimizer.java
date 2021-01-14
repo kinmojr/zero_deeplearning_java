@@ -1,4 +1,4 @@
-package zero.deeplearning.common.optimizer;
+package zero.deeplearning.optimizer;
 
 import org.apache.commons.math3.linear.RealMatrix;
 

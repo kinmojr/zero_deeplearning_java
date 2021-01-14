@@ -1,4 +1,4 @@
-package zero.deeplearning.common.optimizer;
+package zero.deeplearning.optimizer;
 
 import org.apache.commons.math3.linear.RealMatrix;
 
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static zero.deeplearning.common.Functions.*;
-import static zero.deeplearning.common.Utils.*;
+import static zero.deeplearning.common.Utils.createMatrix;
 
 public class Adam implements Optimizer {
     private double lr;
@@ -28,6 +28,19 @@ public class Adam implements Optimizer {
         this.lr = lr;
         this.beta1 = beta1;
         this.beta2 = beta2;
+    }
+
+    public Adam(Map<String, Double> param) {
+        this();
+        if (param.containsKey("lr")) {
+            lr = param.get("lr");
+        }
+        if (param.containsKey("beta1")) {
+            beta1 = param.get("beta1");
+        }
+        if (param.containsKey("beta2")) {
+            beta2 = param.get("beta2");
+        }
     }
 
     @Override

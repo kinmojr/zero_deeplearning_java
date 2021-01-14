@@ -2,13 +2,14 @@ package zero.deeplearning.common;
 
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.linear.RealVector;
+import zero.deeplearning.optimizer.*;
 
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class Utils {
@@ -77,10 +78,6 @@ public class Utils {
         return createMatrix(vals);
     }
 
-    public static RealMatrix initBias(int size) {
-        return createMatrix(new double[1][size]);
-    }
-
     public static RealMatrix extractRowCol(RealMatrix aM, int startRow, int endRow, int startCol, int endCol) {
         return aM.getSubMatrix(startRow, endRow, startCol, endCol);
     }
@@ -107,14 +104,6 @@ public class Utils {
         int[] rows = new int[aM.getRowDimension()];
         for (int i = 0; i < aM.getRowDimension(); i++) rows[i] = i;
         return aM.getSubMatrix(rows, cols);
-    }
-
-    public static RealVector extractRowCol(RealMatrix aM, int startRow, int endRow, int col) {
-        return aM.getColumnVector(col).getSubVector(startRow, endRow - startRow + 1);
-    }
-
-    public static RealVector extract(RealVector aV, int start, int end) {
-        return aV.getSubVector(start, end - start + 1);
     }
 
     public static int[] randomChoice(int trainSize, int batchSize) {
@@ -187,5 +176,25 @@ public class Utils {
         }
         total = total / ((m.getRowDimension() + 1) * (m.getColumnDimension() + 1));
         System.out.println(total);
+    }
+
+    public static Optimizer createOptimizer(String optimizerName, Map<String, Double> optimizerParam) {
+        Optimizer optimizer;
+        if ("sgd".equals(optimizerName.toLowerCase())) {
+            optimizer = new SGD(optimizerParam);
+        } else if ("momentum".equals(optimizerName.toLowerCase())) {
+            optimizer = new Momentum(optimizerParam);
+        } else if ("nesterov".equals(optimizerName.toLowerCase())) {
+            optimizer = new Nesterov(optimizerParam);
+        } else if ("adgrad".equals(optimizerName.toLowerCase())) {
+            optimizer = new AdaGrad(optimizerParam);
+        } else if ("rmsprop".equals(optimizerName.toLowerCase())) {
+            optimizer = new RMSprop(optimizerParam);
+        } else if ("adgm".equals(optimizerName.toLowerCase())) {
+            optimizer = new Adam(optimizerParam);
+        } else {
+            throw new RuntimeException("Unsupported optimizer");
+        }
+        return optimizer;
     }
 }

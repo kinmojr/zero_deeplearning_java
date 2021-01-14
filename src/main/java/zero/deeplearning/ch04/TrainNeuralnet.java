@@ -1,18 +1,19 @@
 package zero.deeplearning.ch04;
 
 import org.apache.commons.math3.linear.RealMatrix;
+import zero.deeplearning.common.MnistDataset;
 
 import java.io.IOException;
 import java.util.HashMap;
 
-import zero.deeplearning.common.MNIST;
-
-import static zero.deeplearning.common.Functions.*;
-import static zero.deeplearning.common.Utils.*;
+import static zero.deeplearning.common.Functions.mult;
+import static zero.deeplearning.common.Functions.sub;
+import static zero.deeplearning.common.Utils.extractRow;
+import static zero.deeplearning.common.Utils.randomChoice;
 
 public class TrainNeuralnet {
     public static void main(String... args) throws IOException {
-        HashMap<String, RealMatrix> dataset = MNIST.loadMinist(true, true);
+        HashMap<String, RealMatrix> dataset = MnistDataset.loadMinist(true, true);
         RealMatrix xTrain = dataset.get("train_img");
         RealMatrix tTrain = dataset.get("train_label");
         RealMatrix xTest = dataset.get("test_img");

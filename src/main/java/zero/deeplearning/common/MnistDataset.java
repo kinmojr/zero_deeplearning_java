@@ -9,9 +9,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 
-import static zero.deeplearning.common.Utils.*;
+import static zero.deeplearning.common.Utils.createMatrix;
+import static zero.deeplearning.common.Utils.download;
 
-public class MNIST {
+public class MnistDataset {
     private static final String URL_BASE = "http://yann.lecun.com/exdb/mnist/";
     private static final HashMap<String, String> KEY_FILE = new HashMap<>();
     private static final String DATASET_DIR = "./dataset/mnist/";

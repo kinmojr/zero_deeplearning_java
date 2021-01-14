@@ -1,4 +1,4 @@
-package zero.deeplearning.common.layer;
+package zero.deeplearning.layer;
 
 import org.apache.commons.math3.linear.RealMatrix;
 
@@ -19,7 +19,7 @@ public class Affine extends Layer {
     @Override
     public RealMatrix forward(RealMatrix x) {
         this.x = x;
-        return addBias(dot(x, w), b);
+        return add(dot(x, w), b);
     }
 
     @Override
